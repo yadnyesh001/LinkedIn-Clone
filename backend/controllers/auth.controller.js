@@ -61,9 +61,36 @@ export const signup = async (req, res) => {
 }
 
 export const login = async (req, res) => {
-  res.send('Login route');
+  try {
+    const { username, password } = req.body;
+
+    const user = await User.findOne({ username});
+    if(!user) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if(!isMatch) {
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '3d' });
+    await res.cookie("jwt-linkedin", token, {
+      httpOnly: true,
+      maxAge: 3 * 24 * 60 * 60 * 1000,
+      sameSite: 'strict',
+      secure: process.env.NODE_ENV === 'production',
+    });
+
+    res.json({ message: 'Logged in successfully' });
+
+  } catch (error) {
+    console.log("Error in login controller: ", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 }
 
 export const logout = async (req, res) => {
-  res.send('Logout route');
+  res.clearCookie('jwt-linkedin');
+  res.json({ message: 'Logged out successfully' });
 }
