@@ -4,11 +4,11 @@ import {
 	createConnectionAcceptedEmailTemplate,
 	createWelcomeEmailTemplate,
 } from "./emailTemplates.js";
-
+ 
 export const sendWelcomeEmail = async (email, name, profileUrl) => {
 	const recipient = [{ email }];
 
-	try {
+	try { 
 		const response = await mailtrapClient.send({
 			from: sender,
 			to: recipient,
