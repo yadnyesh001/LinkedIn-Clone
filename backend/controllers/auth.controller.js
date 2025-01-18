@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import { sendWelcomeEmail } from '../emails/emailHandlers.js';
 
 export const signup = async (req, res) => {
-  try {
+  try { 
     const { name, username, email, password } = req.body;
 
     if (!name || !username || !email || !password) {
@@ -37,7 +37,7 @@ export const signup = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '3d' });
 
-    res.cookie("jwt-linkedin", token, {
+    res.cookie("jwt-freelancing", token, {
       httpOnly: true, // to disable accessing token via client side
       maxAge: 3 * 24 * 60 * 60 * 1000, // session cookie will expire after 3 days
       sameSite: 'strict',  // cookie will only be sent in same-site context
