@@ -1,7 +1,7 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import mongooseSanitize from 'mongoose-sanitize';
+import mongooseSanitize from 'express-mongo-sanitize';
 import { sendWelcomeEmail } from '../emails/emailHandlers.js';
 
 export const signup = async (req, res) => {
@@ -39,7 +39,7 @@ export const signup = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '3d' });
 
-    res.cookie("jwt-freelancing", token, {
+    res.cookie("jwt-linkedin", token, {
       httpOnly: true, // to disable accessing token via client side
       maxAge: 3 * 24 * 60 * 60 * 1000, // session cookie will expire after 3 days
       sameSite: 'strict',  // cookie will only be sent in same-site context
