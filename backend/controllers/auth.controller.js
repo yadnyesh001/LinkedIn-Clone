@@ -1,13 +1,11 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import mongooseSanitize from 'express-mongo-sanitize';
 import { sendWelcomeEmail } from '../emails/emailHandlers.js';
 
 export const signup = async (req, res) => {
   try { 
-    const sanitizedBody = mongooseSanitize(req.body);
-    const { name, username, email, password } = sanitizedBody;
+    const { name, username, email, password } = req.body;
 
     if (!name || !username || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
@@ -39,7 +37,7 @@ export const signup = async (req, res) => {
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '3d' });
 
-    res.cookie("jwt-linkedin", token, {
+    res.cookie("jwt-freelancing", token, {
       httpOnly: true, // to disable accessing token via client side
       maxAge: 3 * 24 * 60 * 60 * 1000, // session cookie will expire after 3 days
       sameSite: 'strict',  // cookie will only be sent in same-site context
@@ -64,8 +62,7 @@ export const signup = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const sanitizedBody = mongooseSanitize(req.body);
-    const { username, password } = sanitizedBody;
+    const { username, password } = req.body;
 
     const user = await User.findOne({ username});
     if(!user) {
