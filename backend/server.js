@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import path from "path";
+import mongooseSanitize from 'mongoose-sanitize';
 
 import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
@@ -27,6 +28,7 @@ if (process.env.NODE_ENV !== "production") {
   );
 }
 
+app.use(mongooseSanitize());
 app.use(express.json({ limit: "5mb" }));
 app.use(cookieParser());
 

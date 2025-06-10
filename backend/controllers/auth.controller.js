@@ -1,11 +1,13 @@
 import User from '../models/user.model.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import mongooseSanitize from 'mongoose-sanitize';
 import { sendWelcomeEmail } from '../emails/emailHandlers.js';
 
 export const signup = async (req, res) => {
   try { 
-    const { name, username, email, password } = req.body;
+    const sanitizedBody = mongooseSanitize(req.body);
+    const { name, username, email, password } = sanitizedBody;
 
     if (!name || !username || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
@@ -62,7 +64,8 @@ export const signup = async (req, res) => {
 
 export const login = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const sanitizedBody = mongooseSanitize(req.body);
+    const { username, password } = sanitizedBody;
 
     const user = await User.findOne({ username});
     if(!user) {

@@ -5,8 +5,8 @@
   "main": "backend/server.js",
   "scripts": {
     "dev": "nodemon backend/server.js",
-    "start": "node backend/server.js",
-    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend" 
+    "start": "bun run --watch backend/server.js",
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "keywords": [],
   "type": "module",
@@ -25,6 +25,7 @@
     "lucide-react": "^0.473.0",
     "mailtrap": "^3.4.0",
     "mongoose": "^8.9.3",
+    "mongoose-sanitize": "^1.5.0",
     "react-hot-toast": "^2.5.1"
   },
   "devDependencies": {
